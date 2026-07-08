@@ -8,35 +8,35 @@ body {
     margin: 3px 2px 3px 2px;
 }
 
-/* BUFOR NA REKLAMĘ prv.pl */
-/* Jeśli reklama jest większa lub mniejsza, zmień wartość 120px poniżej */
-.reklama-bufor {
-    height: 120px; 
-    width: 100%;
-    display: block;
-}
-
 /* GŁÓWNY UKŁAD (Dla komputerów) */
 .main-wrapper {
-    display: flex;
+    position: relative; /* Punkt odniesienia dla niezależnego menu */
     width: 100%;
 }
 
+/* LEWA KOLUMNA (Panel Boczny - wisi niezależnie po lewej stronie ekranu) */
 .sidebar {
+    position: absolute;
+    left: 0;
+    top: 0;
     width: 284px;
     box-sizing: border-box;
     padding: 10px;
     text-align: right;
 }
 
+/* PRAWA KOLUMNA (Główna Treść - centruje się idealnie względem całego monitora) */
 .content {
-    flex: 1;
+    display: block;
     box-sizing: border-box;
     padding: 10px;
     max-width: 520px;
+    /* Automatyczne marginesy centrują kolumnę względem 100% szerokości ekranu */
+    margin-left: auto;
+    margin-right: auto;
 }
 
-/* STYLIZACJA LINKÓW */
+/* STYLIZACJA LINKÓW (Dokładnie Twoje kolory) */
 a {
     color: blue;
     text-decoration: none;
@@ -53,12 +53,14 @@ a:active {
     font-weight: bold;
 }
 
+/* SEKCJA ZEGARKA I DATY */
 .date-container {
     font-weight: bold;
     text-align: right;
     line-height: 1.4;
 }
 
+/* LOGOTYPY NA GÓRZE PANELE */
 .header-logos {
     display: flex;
     justify-content: space-between;
@@ -70,7 +72,7 @@ a:active {
     text-align: center;
 }
 
-/* KLASY ZAMIAST TAGÓW <FONT> */
+/* KLASY ZAMIAST STARYCH TAGÓW <FONT> */
 .text-silver-small {
     color: silver;
     font-size: 9pt;
@@ -103,6 +105,7 @@ a:active {
     font-weight: bold;
 }
 
+/* LISTA PLIKÓW I FOOTER */
 .files-list {
     padding-left: 20px;
 }
@@ -117,7 +120,7 @@ img {
     border: 0;
 }
 
-/* SEKCJA KONTAKTOWA */
+/* SEKCJA KONTAKTOWA (Układ maili i SMS) */
 .contact-box {
     display: inline-block;
     font-weight: bold;
@@ -172,12 +175,14 @@ img {
 /* ======================================================= */
 @media (max-width: 768px) {
     .main-wrapper {
-        flex-direction: column; /* Menu i treść lądują jedno pod drugim */
+        display: flex;
+        flex-direction: column; /* Układa menu i treść jedno pod drugim */
     }
     
     .sidebar {
-        width: 100%; /* Menu zajmuje pełną szerokość ekranu telefonu */
-        text-align: center; /* Na telefonie tekst menu wygląda lepiej wyśrodkowany */
+        position: static; /* Wyłącza pozycjonowanie absolutne na telefonie */
+        width: 100%;
+        text-align: center; /* Na telefonie wyśrodkowane menu wygląda naturalniej */
     }
     
     .date-container {
@@ -187,10 +192,12 @@ img {
     .content {
         width: 100%;
         max-width: 100%;
+        margin-left: 0;
+        margin-right: 0;
     }
     
     .header-logos {
-        flex-direction: column; /* Na telefonie logotypy układają się w pionie, żeby się nie gnieść */
+        flex-direction: column;
         align-items: center;
         gap: 10px;
     }
