@@ -9,14 +9,14 @@ body {
     padding: 10px;
 }
 
-/* GŁÓWNY UKŁAD (Dla komputerów) */
+/* GŁÓWNY UKŁAD (Zajmuje cały ekran komputera) */
 .main-wrapper {
     position: relative;
     width: 100%;
     box-sizing: border-box;
 }
 
-/* LEWA KOLUMNA (Sztywno przyklejona do lewej krawędzi) */
+/* LEWA KOLUMNA (Na stałe przyklejona do lewej krawędzi ekranu) */
 .sidebar {
     position: absolute;
     left: 0;
@@ -27,22 +27,19 @@ body {
     text-align: right;
 }
 
-/* PRAWA KOLUMNA (Centruje się względem okna, ale pamięta o lewym marginesie) */
+/* PRAWA KOLUMNA (Centruje się na ekranie i nie wjeżdża na lewą kolumnę) */
 .content {
     display: block;
     box-sizing: border-box;
     padding: 10px;
     max-width: 520px;
+    
+    /* Te trzy linijki poniżej robią całą magię: */
+    /* Centrują treść, ale tworzą twardą barierę (304px) po lewej stronie, */
+    /* dzięki czemu nic nie wjedzie na lewe menu! */
     margin-left: auto;
     margin-right: auto;
-}
-
-/* SZEROKA STOPKA (Zaczyna się po menu i biegnie szeroko do prawej krawędzi) */
-.wide-footer {
-    display: block;
-    box-sizing: border-box;
-    padding: 10px 20px 10px 304px; /* Lewy padding (304px) twardo odpycha tekst od menu */
-    width: 100%;
+    padding-left: 304px; 
 }
 
 /* STYLIZACJA LINKÓW */
@@ -62,12 +59,14 @@ a:active {
     font-weight: bold;
 }
 
+/* SEKCJA ZEGARKA I DATY */
 .date-container {
     font-weight: bold;
     text-align: right;
     line-height: 1.4;
 }
 
+/* LOGOTYPY NA GÓRZE */
 .header-logos {
     display: flex;
     justify-content: space-between;
@@ -139,19 +138,7 @@ img { border: 0; }
         max-width: 520px;
         margin-left: auto;
         margin-right: auto;
-    }
-
-    .wide-footer {
-        width: 100%;
-        max-width: 520px;
-        padding: 10px; /* Na telefonie kasujemy szerokie odpychanie 304px */
-        margin-left: auto;
-        margin-right: auto;
-        text-align: center;
-    }
-
-    .contact-box {
-        text-align: left; /* Maile na telefonie zachowają ładną strukturę */
+        padding-left: 10px; /* Na telefonie kasujemy barierę 304px, żeby pasowało do ekranu */
     }
     
     .header-logos {
