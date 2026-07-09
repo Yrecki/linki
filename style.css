@@ -9,13 +9,14 @@ body {
     padding: 10px;
 }
 
-/* GŁÓWNY KONTENER (Zajmuje cały ekran komputera) */
+/* GŁÓWNY UKŁAD (Dla komputerów) */
 .main-wrapper {
-    position: relative; /* Daje punkt odniesienia dla menu */
+    position: relative;
     width: 100%;
+    box-sizing: border-box;
 }
 
-/* LEWA KOLUMNA (Na stałe przyklejona do lewej krawędzi ekranu!) */
+/* LEWA KOLUMNA (Sztywno przyklejona do lewej krawędzi) */
 .sidebar {
     position: absolute;
     left: 0;
@@ -26,20 +27,22 @@ body {
     text-align: right;
 }
 
-/* PRAWA KOLUMNA (Centruje się na środku ekranu i nie nachodzi na lewą) */
+/* PRAWA KOLUMNA (Centruje się względem okna, ale pamięta o lewym marginesie) */
 .content {
     display: block;
     box-sizing: border-box;
     padding: 10px;
     max-width: 520px;
-    
-    /* Automatyczne marginesy centrują treść względem całego monitora */
     margin-left: auto;
     margin-right: auto;
-    
-    /* TA LINIJKA TO ŚCIANA BEZPIECZEŃSTWA: */
-    /* Zabezpiecza przed wjechaniem treści na lewe menu (284px menu + 20px luzu) */
-    min-margin-left: 304px; 
+}
+
+/* SZEROKA STOPKA (Zaczyna się po menu i biegnie szeroko do prawej krawędzi) */
+.wide-footer {
+    display: block;
+    box-sizing: border-box;
+    padding: 10px 20px 10px 304px; /* Lewy padding (304px) twardo odpycha tekst od menu */
+    width: 100%;
 }
 
 /* STYLIZACJA LINKÓW */
@@ -59,14 +62,12 @@ a:active {
     font-weight: bold;
 }
 
-/* SEKCJA ZEGARKA I DATY */
 .date-container {
     font-weight: bold;
     text-align: right;
     line-height: 1.4;
 }
 
-/* LOGOTYPY NA GÓRZE PANELE */
 .header-logos {
     display: flex;
     justify-content: space-between;
@@ -117,12 +118,12 @@ img { border: 0; }
 @media (max-width: 960px) {
     .main-wrapper {
         display: flex;
-        flex-direction: column; /* Przełącza w pion na telefonach */
+        flex-direction: column;
         align-items: center;
     }
     
     .sidebar {
-        position: static; /* Wyłącza pozycjonowanie absolutne na telefonie */
+        position: static;
         width: 100%;
         max-width: 284px;
         text-align: center;
@@ -138,6 +139,19 @@ img { border: 0; }
         max-width: 520px;
         margin-left: auto;
         margin-right: auto;
+    }
+
+    .wide-footer {
+        width: 100%;
+        max-width: 520px;
+        padding: 10px; /* Na telefonie kasujemy szerokie odpychanie 304px */
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
+
+    .contact-box {
+        text-align: left; /* Maile na telefonie zachowają ładną strukturę */
     }
     
     .header-logos {
