@@ -173,7 +173,7 @@ img {
 /* ======================================================= */
 /* REGUŁA DLA SMARTFONÓW (Ekran węższy niż 768 pikseli)    */
 /* ======================================================= */
-@media (max-width: 768px) {
+@media (max-width: 960px) {
     .main-wrapper {
         display: flex;
         flex-direction: column; /* Układa menu i treść jedno pod drugim */
