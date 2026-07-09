@@ -9,37 +9,37 @@ body {
     padding: 10px;
 }
 
-/* GŁÓWNY KONTENER (RAMA STRONY) */
-/* Centruje całą witrynę na monitorach 4K i pilnuje układu */
+/* GŁÓWNY KONTENER (Zajmuje cały ekran komputera) */
 .main-wrapper {
-    display: flex;
+    position: relative; /* Daje punkt odniesienia dla menu */
     width: 100%;
-    max-width: 1200px; /* Bezpieczna szerokość na komputerach. Możesz ją zwiększyć w przyszłości na 4K */
-    margin-left: auto;
-    margin-right: auto;
-    position: relative;
 }
 
-/* LEWA KOLUMNA (Przypięta do lewej krawędzi naszej ramy) */
+/* LEWA KOLUMNA (Na stałe przyklejona do lewej krawędzi ekranu!) */
 .sidebar {
+    position: absolute;
+    left: 0;
+    top: 0;
     width: 284px;
     box-sizing: border-box;
     padding: 10px;
     text-align: right;
-    flex-shrink: 0;
 }
 
-/* PRAWA KOLUMNA (Główna Treść - wyśrodkowana w pozostałej przestrzeni) */
+/* PRAWA KOLUMNA (Centruje się na środku ekranu i nie nachodzi na lewą) */
 .content {
-    flex: 1;
+    display: block;
     box-sizing: border-box;
     padding: 10px;
     max-width: 520px;
     
-    /* Automatyczne marginesy centrują treść wewnątrz ramy, */
-    /* ale dzięki Flexboxowi treść nigdy nie przekroczy krawędzi lewego menu! */
+    /* Automatyczne marginesy centrują treść względem całego monitora */
     margin-left: auto;
-    margin-right: auto; 
+    margin-right: auto;
+    
+    /* TA LINIJKA TO ŚCIANA BEZPIECZEŃSTWA: */
+    /* Zabezpiecza przed wjechaniem treści na lewe menu (284px menu + 20px luzu) */
+    min-margin-left: 304px; 
 }
 
 /* STYLIZACJA LINKÓW */
@@ -116,11 +116,13 @@ img { border: 0; }
 /* ======================================================= */
 @media (max-width: 960px) {
     .main-wrapper {
+        display: flex;
         flex-direction: column; /* Przełącza w pion na telefonach */
         align-items: center;
     }
     
     .sidebar {
+        position: static; /* Wyłącza pozycjonowanie absolutne na telefonie */
         width: 100%;
         max-width: 284px;
         text-align: center;
