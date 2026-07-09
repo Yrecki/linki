@@ -15,18 +15,19 @@ body {
     width: 100%;
     min-height: 100vh;
     box-sizing: border-box;
+    position: relative; /* Baza dla pozycjonowania elementów na dole */
 }
 
 /* LEWA KOLUMNA (Sztywny panel boczny) */
 .sidebar {
     width: 284px;
     box-sizing: border-box;
-    padding: 13px 10px 13px 10px; /* Dokładne marginesy z Twojego oryginału */
+    padding: 13px 10px 13px 10px;
     text-align: right;
-    flex-shrink: 0; /* Blokuje kurczenie się menu */
+    flex-shrink: 0;
 }
 
-/* PRAWA KOLUMNA (Rozciąga się szeroko na cały monitor, dokładnie jak na zdjęciu) */
+/* PRAWA KOLUMNA (Zaczyna się za menu i leci do końca ekranu w prawo) */
 .content {
     flex: 1;
     box-sizing: border-box;
@@ -35,13 +36,16 @@ body {
     flex-direction: column;
 }
 
-/* BLOKI, KTÓRE MAJĄ BYĆ WĄSKIE (Logotypy, informacje, pliczki) */
+/* BLOKI, KTÓRE MAJĄ BYĆ WĄSKIE I WYŚRODKOWANE (Logotypy, informacje, pliczki) */
 .header-logos, 
 .phone-block, 
 .old-numbers-block, 
-.files-list {
+.files-list,
+.footer-links {
     max-width: 520px;
     width: 100%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* LOGOTYPY NA GÓRZE */
@@ -88,19 +92,29 @@ a:active {
 .old-numbers-block { color: #111111; font-weight: bold; }
 .status-construction { color: #505050; }
 .text-silver-blue { color: #AAAABB; }
-.mail-title { color: #808080; font-size: 10pt; font-weight: bold; }
+
+/* NAGŁÓWEK MAIL TO: (PRZYKLEJONY DO LEWEJ ZWROTNIE) */
+.mail-title { 
+    color: #808080; 
+    font-size: 10pt; 
+    font-weight: bold;
+    position: absolute;
+    bottom: 195px; /* Dokładna wysokość nad stopką */
+    left: 304px; /* Tuż za lewym menu */
+}
 
 .files-list { padding-left: 20px; }
 .files-list li { margin-bottom: 5px; }
 .footer-links { text-align: center; font-weight: bold; }
 img { border: 0; }
 
-/* SEKCJA KONTAKTOWA (Rozciągnięta szeroko od lewej) */
+/* SEKCJA KONTAKTOWA (PRZYKLEJONA DO LEWEJ - OBIECANE ROZWIĄZANIE!) */
 .contact-box {
-    display: inline-block;
     font-weight: bold;
-    margin-top: 5px;
     text-align: left;
+    position: absolute;
+    bottom: 85px; /* Pozycja nad stopką autorską */
+    left: 304px; /* Twardo przyklejone tuż obok lewego menu */
 }
 .email-grid { display: flex; align-items: flex-start; }
 .email-name { text-align: right; min-width: 70px; }
@@ -110,19 +124,26 @@ img { border: 0; }
 .sms-label { min-width: 70px; text-align: center; }
 .sms-value { color: #808080; padding-left: 17px; }
 
+/* Przycisk "do góry" zostaje po prawej stronie wyśrodkowanej treści */
 .go-top-row {
     text-align: right;
+    max-width: 520px;
     width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 40px;
+    margin-bottom: 160px; /* Robi wolne miejsce w układzie, żeby stopka i maile nie najechały na linki */
 }
 
-/* STOPKA AUTORSKA (Idealnie wyśrodkowana względem CAŁEGO ekranu) */
+/* STOPKA AUTORSKA (IDALNIE WYŚRODKOWANA PRZEZ CAŁOŚĆ EKRANU) */
 .site-author-footer {
-    text-align: center;
     color: silver;
     font-size: 8pt;
-    margin-top: auto; /* Spycha stopkę zawsze na sam dół strony */
-    padding: 20px 0;
-    width: 100%;
+    position: absolute;
+    bottom: 20px; /* Przypięta na samym dole strony */
+    left: 0;
+    width: 100%; /* Rozciąga się od lewej do prawej krawędzi obudowy monitora */
+    text-align: center; /* Centruje napis idealnie pośrodku całego ekranu */
 }
 .site-author-footer a { color: blue; }
 .author-img { border: none; height: 16px; width: 16px; vertical-align: middle; }
@@ -132,7 +153,7 @@ img { border: 0; }
 /* ======================================================= */
 @media (max-width: 960px) {
     .main-wrapper {
-        flex-direction: column; /* Układa kolumny w pionie na telefonie */
+        flex-direction: column;
         align-items: center;
     }
     
@@ -149,12 +170,35 @@ img { border: 0; }
     
     .content {
         width: 100%;
-        max-width: 520px; /* Na telefonie cała treść zwęża się do bezpiecznego bloku */
+        max-width: 520px;
         padding: 10px;
     }
 
-    .footer-links, .go-top-row, .site-author-footer {
+    .mail-title {
+        position: static;
         text-align: center;
+        margin-top: 20px;
+    }
+
+    .contact-box {
+        position: static; /* Na telefonie wyłączamy przyklejenie do lewej */
+        display: block;
+        margin: 10px auto;
+        max-width: 300px;
+    }
+
+    .go-top-row {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .site-author-footer {
+        position: static; /* Na telefonie stopka ląduje normalnie na spodzie */
+        width: 100%;
+        text-align: center;
+        margin-top: 20px;
+        padding-bottom: 20px;
     }
     
     .header-logos {
