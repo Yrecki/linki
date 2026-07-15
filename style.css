@@ -211,7 +211,7 @@ img { border: 0; }
 
 
 /* ======================================================= */
-/* REGUŁA DLA POTĘŻNYCH MONITORÓW (Ekran powyżej 2000px)   */
+/* REGUŁA DLA DUŻYCH MONITORÓW (Ekran powyżej 2000px)   */
 /* ======================================================= */
 @media (min-width: 2000px) {
     /* Za pomocą kodu CSS tworzymy wirtualną trzecią kolumnę na ekranie 4K */
@@ -231,6 +231,6 @@ img { border: 0; }
         font-size: 9pt;
         font-style: italic;
         line-height: 1.5;
-        border-left: 1px dashed silver; /* Delikatna przerywana linia oddzielająca */
+        border-left: 3px dashed silver; /* Delikatna przerywana linia oddzielająca */
     }
 }
