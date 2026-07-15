@@ -222,7 +222,7 @@ img { border: 0; }
         position: absolute;
         right: 0;
         top: 0;
-        width: 250px; /* Szerokość nowej kolumny */
+        width: 500px; /* Szerokość nowej kolumny */
         
         /* Wygląd tekstu w nowym panelu */
         box-sizing: border-box;
