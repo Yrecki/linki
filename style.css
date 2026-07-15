@@ -222,7 +222,7 @@ img { border: 0; }
         position: absolute;
         right: 0;
         top: 0;
-        width: 500px; /* Szerokość nowej kolumny */
+        width: 512px; /* Szerokość nowej kolumny */
         
         /* Wygląd tekstu w nowym panelu */
         box-sizing: border-box;
@@ -231,6 +231,6 @@ img { border: 0; }
         font-size: 9pt;
         font-style: italic;
         line-height: 1.5;
-        border-left: 3px dashed silver; /* Delikatna przerywana linia oddzielająca */
+        border-left: 2px dashed silver; /* Delikatna przerywana linia oddzielająca */
     }
 }
