@@ -21,11 +21,11 @@
         <div class="date-container" id="live-clock"></div>
 
         <hr>
-        <a href="https://app.meteo.pl/meteogram/50.90,15.73" class="ymenu" target="_blank">Pogoda u mnie</a><br>
-        <a href="https://app.meteo.pl/meteogram/53.43,14.55" class="ymenu" target="_blank">Pogoda u Kaśki</a><br>
-        <a href="https://app.meteo.pl/meteogram/54.35,18.65" class="ymenu" target="_blank">Pogoda u Oli</a><br>
-        <a href="https://app.meteo.pl/meteogram/50.96,16.35" class="ymenu" target="_blank">Pogoda u Tomka</a><br>
-        <a href="https://app.meteo.pl/meteogram/50.93,15.88" class="ymenu" target="_blank">Pogoda u Zbyszka</a><br>
+        <a href="http://www.meteo.pl/um/php/meteorogram_id_um.php?ntype=0u&id=981" class="ymenu" target="_blank">Pogoda u mnie</a><br>
+        <a href="http://www.meteo.pl/um/php/meteorogram_id_um.php?ntype=0u&id=2987" class="ymenu" target="_blank">Pogoda u Kaśki</a><br>
+        <a href="http://www.meteo.pl/um/php/meteorogram_id_um.php?ntype=0u&id=1001" class="ymenu" target="_blank">Pogoda u Oli</a><br>
+        <a href="http://www.meteo.pl/um/php/meteorogram_id_um.php?ntype=0u&id=1131" class="ymenu" target="_blank">Pogoda u Tomka</a><br>
+        <a href="http://www.meteo.pl/um/php/meteorogram_id_um.php?ntype=0u&id=999" class="ymenu" target="_blank">Pogoda u Zbyszka</a><br>
 		<hr>
         <a href="https://www.blitzortung.org/pl/live_dynamic_maps3.php" class="ymenu" target="_blank">Radar burzowy</a><br>
         <hr>
@@ -36,7 +36,7 @@
 
         <a href="https://view.eumetsat.int/productviewer?v=default" class="ymenu" target="_blank">widok z satelity</a><br>
         <hr>
-        <a href="http://tv.wp.pl/" class="ymenu" target="_blank">program TV</a><br>
+        <a href="https://programtv.naziemna.info/" class="ymenu" target="_blank">program TV</a><br>
         <hr>
 
         <br>
@@ -46,14 +46,15 @@
         <a href="http://hardwarebook.info" class="ymenu" target="_blank">hardwarebook</a><br>
         <hr>
         <a href="http://microchip.com" class="ymenu" target="_blank">microchip.com</a><br>
-        
+        <a href="http://moje moduły" class="ymenu" target="_blank">https://yrecki.github.io/linki/moje_moduly.html</a>
+        <a href="https://yrecki.github.io/linki/moje_moduly.html" class="ymenu" target="_blank">moje moduły</a>
         <br>
         <hr>
         <a href="http://www.nero.com/plk/Downloads.html" class="ymenu" target="_blank">NERO</a><br>
         <a href="http://www.free-codecs.com/K_Lite_Codec_Pack_download.htm" class="ymenu" target="_blank">Download K-Lite Codec Pack</a><br>
         <a href="http://get.adobe.com/pl/reader/otherversions/" class="ymenu" target="_blank">Download Adobe Reader</a><br>
         <hr>
-        
+
         <div class="sidebar-logo">
             <br><br>
             <a href="https://mapa.targeo.pl" target="_blank">
@@ -64,7 +65,7 @@
 
     <!-- PRAWA KOLUMNA (Główna Treść - Wyśrodkowana) -->
     <main class="content">
-        
+
         <div class="header-logos">
             <a href="http://jg24.pl" target="_blank">
                 <img alt="jg24.pl" src="http://jg24.pl/images/layout/logo.gif" title="Portal Jeleniogórskiej Społeczności Lokalnej.">
@@ -89,15 +90,15 @@
             ale nie obliczaj na kompie bo nie wyjdzie!<br>
             <span class="text-red-tiny"><sub>[ nie odbieram "anonimów" ]</sub></span>
         </div>
-        
+
         <hr>
-        
+
         <div class="old-numbers-block">
             <span>Te numery można wykasować:</span><br>
             <img alt="[nieaktualny numer telefonu.]" src="pliczki/wzorek2.gif" title="nieaktualny numer telefonu."><br>
             <img alt="[daaaaawno nieaktualny numer telefonu]" src="pliczki/wzorek1.gif" title="daaaaawno nieaktualny numer telefonu">
         </div>
-        
+
         <hr>
 
         <div class="humor-block">
@@ -129,10 +130,10 @@
             <a href="linki/linkiurzedow.htm" title="Polak nie jest w stanie..." class="ymenu" target="_blank">Inne ważne linki</a>
         </div>
         <hr>
-        
+
         <br><br>
         <span class="mail-title"><b>mail to:</b></span>
-        
+
         <div class="contact-box">
             <div class="email-grid">
                 <div class="email-name">yrecki</div>
@@ -153,7 +154,7 @@
             <a href="#top" title="na szczyt!" class="ymenu">do góry</a>
         </div>
         <hr>
-        
+
         <div class="site-author-footer">
             Strona opracowana dla Firefox, Rozdzielczość min. 800 x 600 px. - by 
             <a href="https://yrecki.github.io/linki/" target="_blank" title="wejście dla admina">Yrecki</a>&nbsp;&nbsp;
@@ -170,20 +171,20 @@
     function updateClock() {
         const nD = ['Niedziela', 'poniedziałek', 'wtorek', 'środa', 'czwartek', 'piątek', 'sobota'];
         const now = new Date();
-        
+
         const dayName = nD[now.getDay()];
         const day = now.getDate();
         let month = now.getMonth() + 1;
         if(month < 10) month = '0' + month;
         const year = now.getFullYear();
-        
+
         let hours = now.getHours();
         let minutes = now.getMinutes();
         let seconds = now.getSeconds();
         if(hours < 10) hours = '0' + hours;
         if(minutes < 10) minutes = '0' + minutes;
         if(seconds < 10) seconds = '0' + seconds;
-        
+
         document.getElementById('live-clock').innerHTML = dayName + ", " + day + "-" + month + "-" + year + "<br>" + hours + ":" + minutes + ":" + seconds;
     }
     updateClock();
