@@ -1,0 +1,45 @@
+name: Czyszczenie historii commitow
+
+on:
+  # 1. Harmonogram: uruchamia się w każdą niedzielę o 03:00 UTC (04:00/05:00 czasu polskiego)
+  schedule:
+    - cron: '0 3 * * 0'
+  
+  # 2. Pozwala uruchomić czyszczenie ręcznie jednym przyciskiem w dowolnej chwili
+  workflow_dispatch:
+
+jobs:
+  reset:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pobranie aktualnych plików
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Spłaszczenie historii do jednego commita
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@://github.com"
+          
+          # Tworzenie czystej gałęzi bez historii
+          git checkout --orphan temp_branch
+          
+          # Dodanie wszystkich aktualnych plików (JSON, HTML, itp.)
+          git add -A
+          
+          # Utworzenie nowego, jedynego commita
+          git commit -m "Automatyczny reset historii pomiarów"
+          
+          # Podmiana starej gałęzi main na czystą
+          git branch -D main
+          git branch -m main
+          
+          # Wymuszenie zapisu na GitHubie (kasuje starą historię)
+          git push -f origin main
+          
+      - name: Usunięcie starych wpisów Deployments
+        uses: chrnorm/deployment-cleanup@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          environment: github-pages

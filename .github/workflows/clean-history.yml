@@ -1,0 +1,30 @@
+name: Clean Git History
+
+on:
+  schedule:
+    # Uruchamia się w każdą niedzielę o 3:00 w nocy (UTC)
+    - cron: '0 3 * * 0'
+  workflow_dispatch: # Pozwala też uruchomić czyszczenie ręcznie przyciskiem
+
+permissions:
+  contents: write
+
+jobs:
+  squash-history:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Reset git history
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@://github.com"
+          git checkout --orphan temp_branch
+          git add -A
+          git commit -m "Reset history"
+          git branch -D main
+          git branch -m main
+          git push -f origin main
