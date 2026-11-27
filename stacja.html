@@ -30,13 +30,6 @@
       font-size: 16px;
     }
 
-    h1 {
-      margin: 4px 0 32px;
-      font-size: clamp(1.8rem, 3.2vw, 3rem);
-      line-height: 1.15;
-      font-weight: 700;
-    }
-
     .grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -54,14 +47,14 @@
     }
 
     h2 {
-      margin: 0 0 27px;
+      margin: 0 0 24px;
       color: var(--accent);
       font-size: 1.45rem;
       line-height: 1.25;
     }
 
     .item {
-      margin: 0 0 21px;
+      margin: 0 0 20px;
       line-height: 1.45;
       overflow-wrap: anywhere;
     }
@@ -95,9 +88,10 @@
     .trend.flat { color: #9e9e9e; }
 
     .minmax {
-      margin-left: 8px;
+      display: block;
+      margin-top: 4px;
       font-size: .88em;
-      white-space: normal;
+      color: var(--muted);
     }
 
     .min { color: var(--blue); }
@@ -141,11 +135,10 @@
 
     @media (max-width: 680px) {
       body { padding: 13px; }
-      h1 { margin-bottom: 22px; }
       .grid { grid-template-columns: 1fr; gap: 14px; }
       .card { padding: 19px; }
-      h2 { margin-bottom: 21px; }
-      .item { margin-bottom: 17px; }
+      h2 { margin-bottom: 20px; }
+      .item { margin-bottom: 16px; }
       .footer { align-items: flex-start; flex-direction: column; }
     }
   </style>
@@ -165,7 +158,7 @@
       </p>
 
       <p class="item">
-        moc WiFi:
+        WiFi / Starty NVS:
         <strong class="value" id="rssi">—</strong>
       </p>
 
@@ -178,11 +171,12 @@
       <p class="item">
         Karta SD:
         <strong class="value" id="sd">—</strong>
+        <span class="small" id="sd-mb"></span>
       </p>
     </section>
 
     <section class="card" aria-labelledby="bme-title">
-      <h2 id="bme-title">BME680 (Trend z ~10 pomiarów)</h2>
+      <h2 id="bme-title">BME680 (Trend z -10 pomiarów)</h2>
 
       <p class="item">
         Temperatura:
@@ -199,14 +193,14 @@
       </p>
 
       <p class="item">
-        Wilgotność bezwględna:
+        Wilgotność:
         <strong class="value" id="wilg">—</strong>
         <span class="trend" id="trend-wilg">—</span>
         <span class="minmax" id="zakres-wilg"></span>
       </p>
 
       <p class="item">
-        jakość powietrza / opór gazu (VOC):
+        Jakość powietrza / VOC:
         <strong class="value" id="voc">—</strong>
         <span class="voc-badge" id="voc-opis">—</span>
       </p>
@@ -219,24 +213,27 @@
         Światło (BH1750):
         <strong class="value" id="swiatlo">—</strong>
         <span class="trend" id="trend-swiatlo">—</span>
+        <span class="minmax" id="zakres-swiatlo"></span>
       </p>
 
       <p class="item">
         Wiatr (A3144):
         <strong class="value" id="wiatr-sr">—</strong>
-        <span class="small">Średnia z okresu wysyłki</span>
-        <span class="minmax max" id="wiatr-max"></span>
+        <span class="small">średnia</span>
+        <span class="minmax" id="zakres-wiatr"></span>
       </p>
 
       <p class="item">
         Deszcz (ADC1):
         <strong class="value" id="deszcz">—</strong>
+        <span class="small" id="deszcz-raw"></span>
+        <span class="minmax" id="zakres-deszcz"></span>
       </p>
 
       <p class="item">
         Radar LD2410B:
         <strong class="value" id="radar">—</strong>
-        <span class="small" id="radar-dystans"></span>
+        <span class="minmax" id="radar-dystans"></span>
       </p>
     </section>
   </main>
@@ -246,11 +243,12 @@
     <span id="connection" role="status" aria-live="polite">Oczekiwanie na dane…</span>
   </div>
 
-  <script>
+
+
+    <script>
     "use strict";
 
     const ODSWIEZANIE_MS = 30000;
-
     const el = (id) => document.getElementById(id);
 
     function liczba(value, decimals = 1) {
@@ -261,11 +259,10 @@
     function ustawTrend(id, trend) {
       const node = el(id);
       const n = Number(trend);
-
       node.className = "trend";
 
       if (!Number.isFinite(n) || n === 0) {
-        node.textContent = "—";
+        node.textContent = "▬";
         node.classList.add("flat");
       } else if (n > 0) {
         node.textContent = "▲";
@@ -276,13 +273,14 @@
       }
     }
 
-    function ustawZakres(id, minimum, maksimum, decimals) {
+    function ustawZakres(id, minimum, maksimum, decimals, jedn = "") {
       const min = liczba(minimum, decimals);
       const max = liczba(maksimum, decimals);
+      const suffix = jedn ? " " + jedn : "";
 
       el(id).innerHTML =
-        '<span class="min">[Min: ' + min +
-        '</span> / <span class="max">Max: ' + max + ']</span>';
+        '[<span class="min">Min: ' + min +
+        '</span> / <span class="max">Max: ' + max + '</span>' + suffix + ']';
     }
 
     function ustawVOC(dane) {
@@ -292,7 +290,6 @@
         ? dane.voc_opis
         : "Brak oceny";
 
-      // Akceptujemy wyłącznie zapis koloru HEX, nie dowolny tekst CSS.
       const kolor = (typeof dane.voc_kolor === "string" &&
                      /^#[0-9a-fA-F]{6}$/.test(dane.voc_kolor))
         ? dane.voc_kolor
@@ -309,9 +306,12 @@
       el("zrodlo").textContent = dane.zrodlo ? "[" + dane.zrodlo + "]" : "";
 
       const rssi = Number(dane.rssi);
-      el("rssi").textContent = Number.isFinite(rssi)
-        ? "(" + rssi + " dBm)"
-        : "—";
+      const boots = Number(dane.boots);
+      let wifiTekst = Number.isFinite(rssi) ? rssi + " dBm" : "—";
+      if (Number.isFinite(boots)) {
+        wifiTekst += " | Starty: " + boots;
+      }
+      el("rssi").textContent = wifiTekst;
 
       const zapas = Number(dane.zapas_proc);
       el("zapas").textContent = Number.isFinite(zapas)
@@ -325,36 +325,41 @@
 
       el("sd").textContent = dane.sd_ok === true ? "OK" : "BRAK / BŁĄD";
       el("sd").className = "value " + (dane.sd_ok === true ? "good" : "bad");
+      const sdMb = Number(dane.sd_mb);
+      el("sd-mb").textContent = (dane.sd_ok === true && Number.isFinite(sdMb))
+        ? "(" + sdMb + " MB)"
+        : "";
 
       el("temp").textContent = liczba(dane.temp, 2) + " °C";
       ustawTrend("trend-temp", dane.trend_temp);
-      ustawZakres("zakres-temp", dane.temp_min, dane.temp_max, 1);
+      ustawZakres("zakres-temp", dane.temp_min, dane.temp_max, 1, "°C");
 
       el("cisn").textContent = liczba(dane.cisn, 2) + " hPa";
       ustawTrend("trend-cisn", dane.trend_cisn);
-      ustawZakres("zakres-cisn", dane.cisn_min, dane.cisn_max, 0);
+      ustawZakres("zakres-cisn", dane.cisn_min, dane.cisn_max, 0, "hPa");
 
       el("wilg").textContent = liczba(dane.wilg, 1) + " %";
       ustawTrend("trend-wilg", dane.trend_wilg);
-      ustawZakres("zakres-wilg", dane.wilg_min, dane.wilg_max, 0);
+      ustawZakres("zakres-wilg", dane.wilg_min, dane.wilg_max, 0, "%");
 
       ustawVOC(dane);
 
       el("swiatlo").textContent = liczba(dane.swiatlo_lx, 1) + " lx";
       ustawTrend("trend-swiatlo", dane.trend_swiatlo);
+      ustawZakres("zakres-swiatlo", dane.swiatlo_min, dane.swiatlo_max, 1, "lx");
 
-      // GitHub publikuje średnią z całego okresu oraz maksimum.
-      // Jednostką obu wartości są impulsy na sekundę.
       el("wiatr-sr").textContent = liczba(dane.wiatr_sr_imps, 2) + " imp/s";
-      el("wiatr-max").textContent =
-        "[Max: " + liczba(dane.wiatr_max_imps, 2) + " imp/s]";
+      ustawZakres("zakres-wiatr", dane.wiatr_min_imps, dane.wiatr_max_imps, 2, "imp/s");
 
       el("deszcz").textContent = liczba(dane.deszcz_proc, 0) + " %";
+      const raw = Number(dane.deszcz_raw);
+      el("deszcz-raw").textContent = Number.isFinite(raw) ? "(RAW: " + raw + ")" : "";
+      ustawZakres("zakres-deszcz", dane.deszcz_min, dane.deszcz_max, 0, "%");
 
-      el("radar").textContent = dane.radar_out === true ? "OBECNOŚĆ" : "BRAK";
+      el("radar").textContent = dane.radar_out === true ? "WYKRYTO" : "BRAK";
       el("radar").className = "value " + (dane.radar_out === true ? "good" : "");
       el("radar-dystans").textContent =
-        "(Dystans: " + liczba(dane.radar_dystans, 0) + " cm)";
+        "Dystans: " + liczba(dane.radar_dystans, 0) + " cm";
     }
 
     async function pobierzDane() {
