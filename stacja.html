@@ -61,6 +61,15 @@
 
     .item:last-child { margin-bottom: 0; }
 
+    .time-row {
+      margin: 0 0 8px;
+      line-height: 1.35;
+    }
+
+    .time-row.second {
+      margin-bottom: 20px;
+    }
+
     .value {
       color: #fff;
       font-size: 1.28em;
@@ -71,7 +80,13 @@
     .small {
       color: var(--muted);
       font-size: .92em;
-      margin-left: 7px;
+      margin-left: 6px;
+    }
+
+    .age {
+      font-size: .88em;
+      font-weight: 700;
+      margin-left: 4px;
     }
 
     .trend {
@@ -149,12 +164,18 @@
 
   <main class="grid">
     <section class="card" aria-labelledby="system-title">
-      <h2 id="system-title">Pomiary wykonano:</h2>
+      <h2 id="system-title">System i Sieć</h2>
 
-      <p class="item">
-        Czas:
+      <p class="time-row">
         <strong class="value" id="czas">—</strong>
         <span class="small" id="zrodlo"></span>
+        <span class="age" id="ntp-age"></span>
+      </p>
+
+      <p class="time-row second">
+        <strong class="value" id="czas-dcf">—</strong>
+        <span class="small" id="zrodlo-dcf"></span>
+        <span class="age" id="dcf-age"></span>
       </p>
 
       <p class="item">
@@ -245,15 +266,42 @@
 
 
 
+
     <script>
     "use strict";
 
     const ODSWIEZANIE_MS = 30000;
+    const DNI_TYG = ["Nie", "Pon", "Wto", "Śro", "Czw", "Pią", "Sob"];
     const el = (id) => document.getElementById(id);
 
     function liczba(value, decimals = 1) {
       const n = Number(value);
       return Number.isFinite(n) ? n.toFixed(decimals) : "—";
+    }
+
+    function formatujCzasUnix(unixSec) {
+      const s = Number(unixSec);
+      if (!Number.isFinite(s) || s <= 0) return "Szukanie sygnału...";
+      const d = new Date(s * 1000);
+      const r = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const dz = String(d.getDate()).padStart(2, "0");
+      const tyg = DNI_TYG[d.getDay()] || "---";
+      const g = String(d.getHours()).padStart(2, "0");
+      const min = String(d.getMinutes()).padStart(2, "0");
+      const sek = String(d.getSeconds()).padStart(2, "0");
+      return `${r}-${m}-${dz} (${tyg}) ${g}:${min}:${sek}`;
+    }
+
+    function ustawWiek(id, sekundy) {
+      const node = el(id);
+      const s = Number(sekundy);
+      if (!Number.isFinite(s) || s < 0) {
+        node.textContent = "";
+        return;
+      }
+      node.textContent = `(${s}s)`;
+      node.style.color = s <= 3650 ? "var(--green)" : "var(--red)";
     }
 
     function ustawTrend(id, trend) {
@@ -304,6 +352,17 @@
     function pokazDane(dane) {
       el("czas").textContent = dane.czas ?? "—";
       el("zrodlo").textContent = dane.zrodlo ? "[" + dane.zrodlo + "]" : "";
+      ustawWiek("ntp-age", dane.ntp_s);
+
+      if (dane.dcf_ok === true) {
+        el("czas-dcf").textContent = formatujCzasUnix(dane.dcf_t);
+        el("zrodlo-dcf").textContent = "[DCF]";
+        ustawWiek("dcf-age", dane.dcf_s);
+      } else {
+        el("czas-dcf").textContent = "DCF77: Szukanie sygnału...";
+        el("zrodlo-dcf").textContent = "";
+        el("dcf-age").textContent = "";
+      }
 
       const rssi = Number(dane.rssi);
       const boots = Number(dane.boots);
